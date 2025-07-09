@@ -8,7 +8,11 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "PokeTracker - Pokemon Card Collection",
   description: "Track and manage your Pokemon card collection",
-    generator: 'v0.dev'
+  icons: {
+    icon: "/icon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
 }
 
 export default function RootLayout({
