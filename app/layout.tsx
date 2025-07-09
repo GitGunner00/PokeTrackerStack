@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 
@@ -10,9 +10,13 @@ export const metadata: Metadata = {
   description: "Track and manage your Pokemon card collection",
   icons: {
     icon: "/icon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/icon-16x16.png",
+    apple: "/apple-icon.png",
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#3b82f6",
 }
 
 export default function RootLayout({
@@ -22,6 +26,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/icon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )
