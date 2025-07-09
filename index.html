@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokeTracker - Pokemon Card Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">⚡</div>
+                <div class="logo-text">
+                    <h1>PokeTracker</h1>
+                    <p>Pokemon Card Collection</p>
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav class="nav-buttons">
+                <button class="nav-btn">Home</button>
+                <button class="nav-btn">Collection</button>
+            </nav>
+
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">👥</span>
+                    <span id="total-cards">0</span>
+                    <span>Cards</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span>$<span id="total-value">0.00</span></span>
+                    <span>Value</span>
+                </div>
+                <button class="add-card-btn" onclick="openAddModal()">
+                    <span>+</span>
+                    Add Card
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+    <main class="main">
+        <div class="container">
+            <!-- Search and Filters -->
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search cards by name, set, or number..." onkeyup="filterCards()">
+                </div>
+                <div class="filters">
+                    <select id="set-filter" onchange="filterCards()">
+                        <option value="">All Sets</option>
+                        <option value="base-set">Base Set</option>
+                        <option value="jungle">Jungle</option>
+                        <option value="fossil">Fossil</option>
+                        <option value="team-rocket">Team Rocket</option>
+                        <option value="gym-heroes">Gym Heroes</option>
+                        <option value="neo-genesis">Neo Genesis</option>
+                    </select>
+                    
+                    <select id="condition-filter" onchange="filterCards()">
+                        <option value="">All Conditions</option>
+                        <option value="mint">Mint</option>
+                        <option value="near-mint">Near Mint</option>
+                        <option value="lightly-played">Lightly Played</option>
+                        <option value="moderately-played">Moderately Played</option>
+                        <option value="heavily-played">Heavily Played</option>
+                        <option value="damaged">Damaged</option>
+                    </select>
+                    
+                    <select id="rarity-filter" onchange="filterCards()">
+                        <option value="">All Rarities</option>
+                        <option value="common">Common</option>
+                        <option value="uncommon">Uncommon</option>
+                        <option value="rare">Rare</option>
+                        <option value="rare-holo">Rare Holo</option>
+                        <option value="ultra-rare">Ultra Rare</option>
+                        <option value="secret-rare">Secret Rare</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Collection Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper blue">
+                        <span class="stat-icon">👥</span>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Total Cards</p>
+                        <p class="stat-number" id="stat-total-cards">0</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper yellow">
+                        <span class="stat-icon">⭐</span>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Collection Value</p>
+                        <p class="stat-number">$<span id="stat-total-value">0.00</span></p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper green">
+                        <span class="stat-icon">💎</span>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Rare Cards</p>
+                        <p class="stat-number" id="stat-rare-cards">0</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper red">
+                        <span class="stat-icon">🔥</span>
+                    </div>
+                    <div class="stat-content">
+                        <p class="stat-label">Sets Complete</p>
+                        <p class="stat-number" id="stat-complete-sets">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Collection -->
+            <div class="collection-section">
+                <div class="collection-header">
+                    <h2>My Collection</h2>
+                    <div class="collection-count">
+                        <span id="filtered-count">0</span> of <span id="total-count">0</span> cards
+                    </div>
+                </div>
+                
+                <div class="card-grid" id="card-grid">
+                    <!-- Cards will be dynamically inserted here -->
+                </div>
+                
+                <div class="empty-state" id="empty-state" style="display: none;">
+                    <div class="empty-icon">🎴</div>
+                    <h3>No cards found</h3>
+                    <p>Add your first Pokemon card to get started!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Card Modal -->
+    <div class="modal-overlay" id="add-modal" onclick="closeAddModal(event)" style="display: none;" >
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Add New Pokemon Card</h2>
+                <button class="close-btn" onclick="closeAddModal()">&times;</button>
+            </div>
+            
+            <form class="add-card-form" onsubmit="addCard(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="card-name">Pokemon Name *</label>
+                        <input type="text" id="card-name" required placeholder="e.g., Charizard">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-set">Set *</label>
+                        <select id="card-set" required>
+                            <option value="">Select Set</option>
+                            <option value="base-set">Base Set</option>
+                            <option value="jungle">Jungle</option>
+                            <option value="fossil">Fossil</option>
+                            <option value="team-rocket">Team Rocket</option>
+                            <option value="gym-heroes">Gym Heroes</option>
+                            <option value="neo-genesis">Neo Genesis</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" placeholder="e.g., 4/102">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-rarity">Rarity *</label>
+                        <select id="card-rarity" required>
+                            <option value="">Select Rarity</option>
+                            <option value="common">Common</option>
+                            <option value="uncommon">Uncommon</option>
+                            <option value="rare">Rare</option>
+                            <option value="rare-holo">Rare Holo</option>
+                            <option value="ultra-rare">Ultra Rare</option>
+                            <option value="secret-rare">Secret Rare</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-condition">Condition *</label>
+                        <select id="card-condition" required>
+                            <option value="">Select Condition</option>
+                            <option value="mint">Mint</option>
+                            <option value="near-mint">Near Mint</option>
+                            <option value="lightly-played">Lightly Played</option>
+                            <option value="moderately-played">Moderately Played</option>
+                            <option value="heavily-played">Heavily Played</option>
+                            <option value="damaged">Damaged</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-value">Estimated Value</label>
+                        <input type="number" id="card-value" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-image">Card Image URL</label>
+                    <input type="url" id="card-image" placeholder="https://example.com/card-image.jpg">
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-notes">Notes (Optional)</label>
+                    <textarea id="card-notes" rows="3" placeholder="Any additional notes about this card..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card Details Modal -->
+    <div class="modal-overlay" id="details-modal" onclick="closeDetailsModal(event)" style="display: none;" >
+        <div class="modal-content large" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <h2 id="details-name">Card Name</h2>
+                    <p id="details-set" class="details-subtitle">Set Name</p>
+                </div>
+                <button class="close-btn" onclick="closeDetailsModal()">&times;</button>
+            </div>
+            
+            <div class="details-content">
+                <div class="details-image">
+                    <div class="card-image-placeholder" id="details-image-container">
+                        <div class="placeholder-content">
+                            <div class="placeholder-icon">🎴</div>
+                            <div class="placeholder-name" id="details-placeholder-name">Card Name</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="details-info">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Card Number</label>
+                            <span id="details-number">N/A</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Rarity</label>
+                            <span class="badge" id="details-rarity">Common</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Condition</label>
+                            <span class="badge" id="details-condition">Mint</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Estimated Value</label>
+                            <span class="value" id="details-value">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="notes-section" id="notes-section" style="display: none;">
+                        <label>Collection Notes</label>
+                        <p id="details-notes"></p>
+                    </div>
+                    
+                    <div class="details-actions">
+                        <button class="btn-primary" onclick="editCard()">
+                            <span>✏️</span> Edit Card
+                        </button>
+                        <button class="btn-danger" onclick="deleteCard()">
+                            <span>🗑️</span> Delete Card
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
