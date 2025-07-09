@@ -14,8 +14,8 @@ export default function Header({ cards }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center py-4 gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-yellow-400 rounded-full flex items-center justify-center text-xl">
-              ⚡
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-yellow-400 rounded-full flex items-center justify-center overflow-hidden">
+              <img src="/pageicon.png" alt="PokeTracker Logo" className="w-8 h-8 rounded-full object-cover" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">PokeTracker</h1>
